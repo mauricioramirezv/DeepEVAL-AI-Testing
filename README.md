@@ -9,7 +9,7 @@ El proyecto recorre un login público de demostración, guarda lo que realmente 
 El proyecto usa la página pública de demostración [the-internet.herokuapp.com/login](https://the-internet.herokuapp.com/login) y muestra tres enfoques:
 
 - **Stagehand v4** abre un navegador Chromium local con CDP y ofrece `act()`, `observe()` y `extract()`.
-- **Gemini 3.8 Flash** y **GPT-6 Astra** realizan las interacciones guiadas por modelo.
+- **Gemini 3.8 Flash** y **GPT-6 Astra** realizan las interacciones guiadas por modelo cuando se configuran sus claves.
 - **Ollama con Qwen 3.5 4B** extrae el resultado; el llenado y envío del formulario usan selectores determinísticos.
 - **DeepEval 4.3.2 o superior** evalúa la evidencia guardada por la ejecución E2E.
 - **RAG** se representa con un archivo de contexto estático; el repositorio no implementa un recuperador ni un chatbot de producción.
@@ -33,8 +33,9 @@ El proyecto fija el rango mayor de Stagehand en `^4.3.0` y DeepEval en `>=4.3.2,
 | Stagehand con Google | Gemini 3.8 Flash | `google/gemini-3.8-flash` |
 | Stagehand con OpenAI | GPT-6 Astra | `openai/gpt-6-astra` |
 | Stagehand local | Qwen 3.5 4B en Ollama | `qwen3.5:4b` |
-| Juez DeepEval Google | Gemini 3.8 Flash | `gemini-3.8-flash` |
-| Juez DeepEval OpenAI general | GPT-5.4 | `gpt-5.4` |
+| Juez DeepEval local | Qwen 3.5 4B en Ollama | `qwen3.5:4b` |
+| Juez DeepEval Google (opcional) | Gemini 3.8 Flash | `gemini-3.8-flash` |
+| Juez DeepEval OpenAI (opcional) | GPT-5.4 | `gpt-5.4` |
 
 Stagehand v4 no ofrece Ollama como proveedor nativo: el ejemplo local usa el callback de generación de Stagehand y la API estructurada de Ollama. DeepEval usa sus clases de proveedor `GeminiModel`, `OpenAIModel` y `OllamaModel`.
 
@@ -101,7 +102,7 @@ npm run test:observe
 - `test:ollama`: selectores estables llenan y envían el formulario; el modelo configurado en Ollama extrae el mensaje.
 - `test:observe`: Gemini primero inspecciona los controles y luego ejecuta y extrae el resultado.
 
-El navegador se ejecuta en segundo plano por defecto (`HEADLESS=true`). Configura `HEADLESS=false` en `.env` para verlo.
+El navegador se muestra por defecto (`HEADLESS=false`). Configura `HEADLESS=true` en `.env` para ejecutarlo en segundo plano. DeepEval no inicia el navegador: primero ejecuta uno de los comandos Stagehand anteriores.
 
 ## Ejecutar evaluaciones DeepEval
 
@@ -120,20 +121,20 @@ npm run deepeval:correctness
 npm run deepeval:toxicity
 ```
 
-Selecciona el modelo juez de DeepEval con `EVAL_PROVIDER`:
+Selecciona el modelo juez de DeepEval con `EVAL_PROVIDER` (por defecto `ollama`, configurado en `.env.example`):
 
-- `gemini` (por defecto), con `GEMINI_EVAL_MODEL`.
+- `ollama` (local, por defecto), con `OLLAMA_MODEL` y `OLLAMA_BASE_URL`.
+- `gemini`, con `GEMINI_EVAL_MODEL`.
 - `openai`, con `OPENAI_EVAL_MODEL`.
-- `ollama`, con `OLLAMA_MODEL` y `OLLAMA_BASE_URL`.
 
-Para ejecutar toda la suite sin claves cloud, inicia Ollama, instala el modelo indicado en `.env` y selecciona el proveedor local en PowerShell:
+Para ejecutar toda la suite sin claves cloud, inicia Ollama e instala el modelo configurado en `.env`:
 
 ```powershell
-$env:EVAL_PROVIDER = "ollama"
+ollama pull qwen3.5:4b
 npm run deepeval:all
 ```
 
-En macOS o Linux, activa el entorno con `source .venv/bin/activate` y selecciona el proveedor con `export EVAL_PROVIDER=ollama`.
+Activa `.venv` en esa misma terminal. DeepEval imprime los scores y sus razones allí. `CONFIDENT_API_KEY` solo hace falta para subir los resultados a Confident AI; no ejecutes `deepeval login` ni `deepeval view` para ver el reporte local.
 
 La evaluación `agent` usa `TaskCompletionMetric` y sigue `EVAL_PROVIDER`. La prueba `correctness` usa `ExactMatchMetric`, porque el banner admite una sola respuesta exacta y no necesita un juez LLM.
 

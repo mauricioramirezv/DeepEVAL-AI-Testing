@@ -6,7 +6,7 @@ from deepeval.models import GeminiModel, OllamaModel, OpenAIModel
 def get_evaluation_model():
     """Build a current DeepEval provider model from the project .env settings."""
     load_dotenv()
-    provider = os.getenv("EVAL_PROVIDER", "gemini").strip().lower()
+    provider = os.getenv("EVAL_PROVIDER", "ollama").strip().lower()
 
     if provider == "gemini":
         return GeminiModel(

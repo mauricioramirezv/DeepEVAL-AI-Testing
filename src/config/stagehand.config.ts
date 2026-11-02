@@ -26,5 +26,5 @@ export const MODELS = {
 };
 
 export const BROWSER_OPTIONS = {
-  headless: process.env.HEADLESS?.toLowerCase() !== "false",
+  headless: process.env.HEADLESS?.toLowerCase() === "true",
 };
