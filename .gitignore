@@ -7,7 +7,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # =========================
-# PLAYWRIGHT
+# BROWSER ARTIFACTS
 # =========================
 playwright-report/
 test-results/
@@ -55,3 +55,4 @@ env/
 # =========================
 .DS_Store
 Thumbs.db
+artifacts/

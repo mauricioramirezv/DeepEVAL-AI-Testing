@@ -1,50 +1,6 @@
-import { Stagehand } from "@browserbasehq/stagehand";
+import { runLoginScenario } from "./login.scenario";
 
-async function main() {
-    const stagehand = new Stagehand({
-        env: "LOCAL",
-        model: "ollama/llama3.2:3b",
-        localBrowserLaunchOptions: {
-            headless: false
-        }
-    });
-
-    try {
-        await stagehand.init();
-
-        const page = stagehand.context.pages()[0];
-
-        console.log("Abriendo página de login...");
-        await page.goto("https://the-internet.herokuapp.com/login", {
-            waitUntil: "domcontentloaded"
-        });
-
-        console.log("Ejecutando login con JavaScript estable...");
-        await page.evaluate(() => {
-            const username = document.querySelector("#username") as HTMLInputElement;
-            const password = document.querySelector("#password") as HTMLInputElement;
-            const button = document.querySelector("button[type='submit']") as HTMLButtonElement;
-
-            username.value = "tomsmith";
-            password.value = "SuperSecretPassword!";
-            button.click();
-        });
-
-        await page.waitForTimeout(3000);
-
-        console.log("Extrayendo resultado con IA local...");
-        const result = await stagehand.extract(
-            "Extract the login result message shown on the page. Return only the message text."
-        );
-
-        console.log("Resultado extraído por IA:");
-        console.log(result);
-
-    } catch (error) {
-        console.error("La prueba con Ollama falló:", error);
-    } finally {
-        await stagehand.close();
-    }
-}
-
-main();
+runLoginScenario({ provider: "ollama", interaction: "deterministic" }).catch((error) => {
+  console.error("La prueba local con Ollama falló:", error);
+  process.exitCode = 1;
+});

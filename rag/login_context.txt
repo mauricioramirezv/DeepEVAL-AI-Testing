@@ -1,18 +1,10 @@
-# Contexto RAG para el escenario de login
+# Contexto de referencia para la evaluación RAG del ejemplo
 
 Sistema bajo prueba:
 https://the-internet.herokuapp.com/login
 
-Credenciales válidas:
-- Usuario: tomsmith
-- Contraseña: SuperSecretPassword!
-
-Criterio de éxito:
-El login se considera exitoso si la página muestra el mensaje:
+El login se considera exitoso si la página muestra exactamente el mensaje:
 "You logged into a secure area!"
 
-Criterio de fallo:
-El login se considera fallido si la página muestra mensajes relacionados con usuario inválido, contraseña inválida o acceso denegado.
-
-Uso del contexto:
-Este archivo simula una pequeña base de conocimiento RAG que el agente o chatbot puede consultar para responder si la acción ejecutada en la página fue correcta.
+Este archivo es contexto estático de demostración. El proyecto no implementa
+un sistema de recuperación ni un chatbot de producción.

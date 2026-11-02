@@ -1,10 +1,10 @@
 {
   "name": "deepeval-ai",
   "version": "1.0.0",
-  "description": "Ejemplo para demostrar Testing E2E con IA usando Stagehand, Playwright, GPT, Gemini, Ollama local y evaluación con DeepEval.",
+  "description": "Ejemplos de automatización web con Stagehand v4 y evaluación de salidas reales con DeepEval.",
   "type": "module",
   "scripts": {
-     "test:ollama": "tsx tests/stagehand/login-ollama.e2e.ts",
+    "test:ollama": "tsx tests/stagehand/login-ollama.e2e.ts",
     "test:gemini": "tsx tests/stagehand/login-gemini.e2e.ts",
     "test:gpt": "tsx tests/stagehand/login-gpt.e2e.ts",
     "test:observe": "tsx tests/stagehand/observe-extract.e2e.ts",
@@ -16,11 +16,11 @@
     "deepeval:agent": "deepeval test run ./deepeval_tests/test_agent_completion.py"
   },
   "dependencies": {
-    "@browserbasehq/stagehand": "latest",
+    "@browserbasehq/stagehand": "^4.3.0",
     "dotenv": "^16.4.5",
-    "playwright": "latest",
     "tsx": "^4.19.2",
-    "typescript": "latest"
+    "typescript": "^5.8.3",
+    "zod": "^4.1.12"
   },
   "devDependencies": {}
 }
